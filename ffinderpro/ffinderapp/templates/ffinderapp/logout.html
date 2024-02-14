@@ -1,0 +1,15 @@
+{% extends 'ffinderapp/base.html' %}
+
+{% block title %}Logout{% endblock %}
+
+{% block content %}
+    <h2>Logout</h2>
+    <p>Are you sure you want to logout?</p>
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+    <div class="border-top pt-3">
+        <small class="text-muted"><a class="ml-2" href="{% url 'login' %}">Login</a></small>
+    </div>
+{% endblock %}

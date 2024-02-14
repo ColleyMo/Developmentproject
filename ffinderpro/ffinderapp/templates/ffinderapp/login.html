@@ -1,18 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FFinderPro - Login</title>
-</head>
-<body>
-    {% load crispy_forms_tags %}
-    <h1>Login</h1>
-    <form method="post" action="{% url 'login' %}">
+{% extends "ffinderapp/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Login {% endblock %}
+{% block content %}
+
+<div class="content-section">
+    <form method="post" class="form">
         {% csrf_token %}
-        {{ form | crispy }}
-        <button type="submit">Login</button>
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Login</legend>
+            {{ form|crispy }}
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-outline-info" type="submit">Login</button>
+        </div>
     </form>
-    <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
-</body>
-</html>
+    <div class="border-top pt-3">
+        <small class="text-muted">You need to create an account?<a class="ml-2" href="{% url 'signup' %}">Register</a></small>
+    </div>
+</div>
+{% endblock %}

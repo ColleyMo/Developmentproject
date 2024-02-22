@@ -1,8 +1,10 @@
 from django.contrib.auth import login, authenticate
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import SignUpForm, LoginForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from .forms import UserUpdateForm, ProfileUpdateForm
+from .models import Profile
 from .forms import UserUpdateForm, ProfileUpdateForm
 
 def home(request):
@@ -33,18 +35,23 @@ def login_view(request):
 
 @login_required
 def profile(request):
+    # Try to get the user's profile, or create it if it doesn't exist
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
+
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
             messages.success(request, 'Your account has been successfully updated.')
-            return redirect('profile')
+            return redirect('home')
         else:
             messages.error(request, 'Error updating your account. Please check the form.')
     else:
         u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.profile)
+        p_form = ProfileUpdateForm(instance=profile)
+
     context = {'u_form': u_form, 'p_form': p_form, 'title': 'profile'}
-    return render(request, 'profile.html', context)
+    return render(request, 'ffinderapp/profile.html', context)

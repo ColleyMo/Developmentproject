@@ -6,4 +6,4 @@ class FfinderappConfig(AppConfig):
     name = "ffinderapp"
 
 def ready(self):
-    from .signals import create_profile
+    import ffinderapp.signals

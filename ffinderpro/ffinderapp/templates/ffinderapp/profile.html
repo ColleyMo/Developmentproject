@@ -1,27 +1,72 @@
 {% extends 'ffinderapp/base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
+
 
 {% block content %}
 <div class="col-md-12">
     <div class="content-section">
         <div class="media">
-            <p><img class="rounded-circle account-img" src="{{ user.profile.photo.url }}"></p>
+            {% if user.profile.photo %}
+                <p><img class="rounded-circle account-img" src="{{ user.profile.photo.url }}"></p>
+            {% else %}
+                <p><img class="rounded-circle account-img" src="{% static 'media/default.png' %}"></p>
+            {% endif %}
             <div class="media-body">
                 <h2 class="account-heading">{{ user.username }}</h2>
-                <p class="text-secondary">Student ID: {{ user.student.student_id }}<br>
-                Email: {{ user.email }}<br>
-                Course: {{ user.student.course }}</p>
+                {% if user.profile.date_of_birth %}
+                    <p class="text-secondary">Date of Birth: {{ user.profile.date_of_birth }}</p>
+                {% endif %}
+                {% if user.profile.address %}
+                    <p class="text-secondary">Address: {{ user.profile.address }}</p>
+                {% endif %}
+                {% if user.profile.city %}
+                    <p class="text-secondary">City: {{ user.profile.city }}</p>
+                {% endif %}
+                <!-- Additional profile information goes here -->
             </div>
         </div>
-        
+
+        {% if user.player %}
+            <h3>Player Information</h3>
+            <p>Position: {{ user.player.get_position_display }}</p>
+            {% if user.player.date_of_birth %}
+                <p>Date of Birth: {{ user.player.date_of_birth }}</p>
+            {% endif %}
+            {% if user.player.previous_clubs %}
+                <p>Previous Clubs: {{ user.player.previous_clubs }}</p>
+            {% endif %}
+        {% endif %}
+
+        {% if user.team %}
+            <h3>Team Information</h3>
+            <p>Name: {{ user.team.name }}</p>
+            <p>Location: {{ user.team.location }}</p>
+            <p>League: {{ user.team.league }}</p>
+            <p>League Division: {{ user.team.league_division }}</p>
+            <p>Level on Pyramid: {{ user.team.level_on_pyramid }}</p>
+        {% endif %}
+
+        <!-- Additional sections for other user roles -->
 
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Student Profile</legend>
+                <legend class="border-bottom mb-4">User Profile</legend>
                 {{ u_form|crispy }}
-                {{ p_form|crispy }}
             </fieldset>
+            {% if user.player %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Player Profile</legend>
+                    {{ p_form|crispy }}
+                </fieldset>
+            {% endif %}
+            {% if user.team %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Team Profile</legend>
+                    {{ t_form|crispy }}
+                </fieldset>
+            {% endif %}
             <div class="form-group">
                 <button class="btn btn-outline-info" type="submit">Update</button>
             </div>

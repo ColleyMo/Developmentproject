@@ -1,13 +1,6 @@
-{% extends "ffinderapp/base.html" %}
-
-{% block title %}Home{% endblock %}
+{% extends 'ffinderapp/base.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 
-<body>
-    <h1>Welcome to FFinderPro</h1>
-    <p>This is the home page.</p>
-    <a href="{% url 'signup' %}">Sign Up</a> | <a href="{% url 'login' %}">Login</a>
-</body>
-
-{% endblock content %}
+{% endblock %}

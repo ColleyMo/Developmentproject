@@ -53,7 +53,7 @@ class Player(models.Model):
     previous_clubs = models.TextField()
     address = models.CharField(max_length=255, default='', blank=True)
     city = models.CharField(max_length=100, default='', blank=True)
-    photo = models.ImageField(upload_to='student_photos/', null=True, blank=True)
+    photo = models.ImageField(upload_to='media/', null=True, blank=True)
 
     # Add more fields as needed
 
@@ -84,3 +84,15 @@ class Profile(models.Model):
     def __str__(self):
         return f"{self.user.username}'s Profile"
     
+
+class TeamProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    location = models.CharField(max_length=255)
+    league = models.CharField(max_length=100)
+    league_division = models.CharField(max_length=50)
+    level_on_pyramid = models.CharField(max_length=50)
+    # Add fields specific to the team's profile
+
+    def __str__(self):
+        return f"{self.user.username}'s TeamProfile"

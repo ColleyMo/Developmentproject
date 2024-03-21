@@ -1,8 +1,8 @@
-# forms.py
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Player, Team
+from .models import PlayerProfile, TeamProfile
+
 
 class SignUpForm(UserCreationForm):
     USER_CHOICES = (
@@ -15,43 +15,29 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ['username', 'password1', 'password2']
 
-class LoginForm(AuthenticationForm):
-    class Meta:
-        model = User
 
-class UserUpdateForm(forms.ModelForm):
-    email = forms.EmailField()
-
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'email']
-
-class ProfileUpdateForm(forms.ModelForm):
+class PlayerSignUpForm(UserCreationForm):
     date_of_birth = forms.DateField(
         widget=forms.widgets.DateInput(attrs={'type': 'date'}),
         help_text='Enter your date of birth'
     )
+    address = forms.CharField(max_length=255, required=False)
+    city = forms.CharField(max_length=100, required=False)
+    photo = forms.ImageField(required=False)
 
     class Meta:
-        model = Player  # Assuming Player is the profile model for players
-        fields = ['date_of_birth', 'address', 'city', 'photo']
+        model = User
+        fields = ['username', 'password1', 'password2', 'date_of_birth', 'address', 'city', 'photo']
 
-class PlayerSignUpForm(UserCreationForm):
-    class Meta:
-        model = Player
-        fields = ['date_of_birth', 'previous_clubs', 'address', 'city', 'photo']
-
-    def __init__(self, *args, **kwargs):
-        super(PlayerSignUpForm, self).__init__(*args, **kwargs)
-        # Remove the 'username' field from the form
-        del self.fields['username']
 
 class TeamSignUpForm(UserCreationForm):
-    class Meta:
-        model = Team
-        fields = ['name', 'location', 'league', 'league_division', 'level_on_pyramid']
+    name = forms.CharField(max_length=100)
+    location = forms.CharField(max_length=255)
+    league = forms.CharField(max_length=100)
+    league_division = forms.CharField(max_length=50)
+    level_on_pyramid = forms.CharField(max_length=50)
+    photo = forms.ImageField(required=False)
 
-    def __init__(self, *args, **kwargs):
-        super(TeamSignUpForm, self).__init__(*args, **kwargs)
-        # Remove the 'username' field from the form
-        del self.fields['username']
+    class Meta:
+        model = User
+        fields = ['username', 'password1', 'password2', 'name', 'location', 'league', 'league_division', 'level_on_pyramid', 'photo', ]

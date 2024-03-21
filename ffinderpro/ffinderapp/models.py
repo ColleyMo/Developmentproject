@@ -1,98 +1,71 @@
-from django.contrib.auth.models import User, Group
-from django.shortcuts import render
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    date_of_birth = models.DateField(null=True, blank=True)
-    address = models.CharField(max_length=255, null=True, blank=True)
-    city = models.CharField(max_length=100, null=True, blank=True)
-    country = models.CharField(max_length=100, null=True, blank=True)
-    photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
 
-    def __str__(self):
-        return self.user.username
+class CustomUser(AbstractUser):
+    is_player = models.BooleanField(default=False)
+    is_team = models.BooleanField(default=False)
 
-from django.db import models
+    class Meta:
+        verbose_name_plural = "Custom users"
 
-class NestedChoices(models.TextChoices):
-    CENTER_BACK = 'cb', 'Center Back'
-    RIGHT_BACK = 'rb', 'Right Back'
-    LEFT_BACK = 'lb', 'Left Back'
-    DEFENSIVE_MIDFIELDER = 'dm', 'Defensive Midfielder'
-    CENTRAL_MIDFIELDER = 'cm', 'Central Midfielder'
-    ATTACKING_MIDFIELDER = 'am', 'Attacking Midfielder'
-    STRIKER = 'st', 'Striker'
-    LEFT_WINGER = 'lw','Left Winger'
-    RIGHT_WINGER = 'rw', 'Right Winger'
-
+# Resolve clash by specifying unique related names for groups and user_permissions fields
+CustomUser._meta.get_field('groups').remote_field.related_name = 'custom_user_groups'
+CustomUser._meta.get_field('user_permissions').remote_field.related_name = 'custom_user_permissions'
 
 class Player(models.Model):
-    POSITION_CHOICES = [
-        ('gk', 'Goalkeeper'),
-        ('def', [
-            (NestedChoices.CENTER_BACK, 'Center Back'),
-            (NestedChoices.RIGHT_BACK, 'Right Back'),
-            (NestedChoices.LEFT_BACK, 'Left Back'),
-        ]),
-        ('mid', [
-            (NestedChoices.DEFENSIVE_MIDFIELDER, 'Defensive Midfielder'),
-            (NestedChoices.CENTRAL_MIDFIELDER, 'Central Midfielder'),
-            (NestedChoices.ATTACKING_MIDFIELDER, 'Attacking Midfielder'),
-        ]),
-        ('att', [
-            (NestedChoices.STRIKER, 'Striker'),
-            (NestedChoices.RIGHT_WINGER, 'Right Winger'),
-            (NestedChoices.LEFT_WINGER, 'Left winger'),
-        ]),
-    ]
-
-    user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
-    position = models.CharField(max_length=3, choices=POSITION_CHOICES)
-    date_of_birth = models.DateField(null=True, blank=True)
-    previous_clubs = models.TextField()
-    address = models.CharField(max_length=255, default='', blank=True)
-    city = models.CharField(max_length=100, default='', blank=True)
-    photo = models.ImageField(upload_to='media/', null=True, blank=True)
-
-    # Add more fields as needed
-
-
-    def __str__(self):
-        return self.user_profile.user.username
-
-
-class Team(models.Model):
-    user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    location = models.CharField(max_length=255)
-    league = models.CharField(max_length=100)
-    league_division = models.CharField(max_length=50)
-    level_on_pyramid = models.CharField(max_length=50)
-    # Add more fields as needed
-
-    def __str__(self):
-        return self.name
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default=1)
     date_of_birth = models.DateField(null=True, blank=True)
     address = models.CharField(max_length=255, blank=True)
     city = models.CharField(max_length=100, blank=True)
-    photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
+    photo = models.ImageField(upload_to='player_photos/', null=True, blank=True)
+    # Add more fields as needed
 
-    def __str__(self):
-        return f"{self.user.username}'s Profile"
-    
 
-class TeamProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class Team(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default=1)
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=255)
     league = models.CharField(max_length=100)
     league_division = models.CharField(max_length=50)
     level_on_pyramid = models.CharField(max_length=50)
-    # Add fields specific to the team's profile
+    photo = models.ImageField(upload_to='team_photos/', null=True, blank=True)
+    # Add more fields as needed
 
-    def __str__(self):
-        return f"{self.user.username}'s TeamProfile"
+
+class Listing(models.Model):
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    requirements = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    team_photo = models.ImageField(upload_to='team_listing_photos/', null=True, blank=True)
+    # Add more fields as needed
+
+
+class Application(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
+    message = models.TextField()
+    applied_at = models.DateTimeField(auto_now_add=True)
+    # Add more fields as needed
+
+
+class PlayerProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    address = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    photo = models.ImageField(upload_to='player_photos/', null=True, blank=True)
+    # Add more fields specific to player profile
+
+
+class TeamProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
+    name = models.CharField(max_length=100)
+    location = models.CharField(max_length=255)
+    league = models.CharField(max_length=100)
+    league_division = models.CharField(max_length=50)
+    level_on_pyramid = models.CharField(max_length=50)
+    photo = models.ImageField(upload_to='team_profile_photos/', default='/Users/mcolley/Developmentproject/ffinderpro/ffinderapp/static/media/logo.jpeg', null=True, blank=True)
+    # Add more fields specific to team profile

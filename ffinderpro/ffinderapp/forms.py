@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import PlayerProfile, TeamProfile
+from .models import PlayerProfile, TeamProfile, Listing
 
 
 class SignUpForm(UserCreationForm):
@@ -41,3 +41,9 @@ class TeamSignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'password1', 'password2', 'name', 'location', 'league', 'league_division', 'level_on_pyramid', 'photo', ]
+
+
+class ListingForm(forms.ModelForm):
+    class Meta:
+        model = Listing
+        fields = ['title', 'description', 'positions', 'location', 'photo']

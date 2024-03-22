@@ -3,8 +3,8 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import SignUpForm, PlayerSignUpForm, TeamSignUpForm
-from .models import CustomUser, Player, PlayerProfile, TeamProfile
+from .forms import SignUpForm, PlayerSignUpForm, TeamSignUpForm, ListingForm
+from .models import CustomUser, Player, PlayerProfile, TeamProfile, Listing
 
 
 def home(request):
@@ -88,3 +88,20 @@ def profile(request):
         pass  # Implement your logic here
 
     return render(request, 'ffinderapp/profile.html')
+
+
+def create_listing(request):
+    if request.method == 'POST':
+        form = ListingForm(request.POST, request.FILES)
+        if form.is_valid():
+            listing = form.save(commit=False)
+            listing.team = request.user
+            listing.save()
+            return redirect('ffinderapp/listing_detail', listing_id=listing.id)
+    else:
+        form = ListingForm()
+    return render(request, 'ffinderapp/create_listing.html', {'form': form})
+
+def listing_detail(request, listing_id):
+    listing = Listing.objects.get(id=listing_id)
+    return render(request, 'ffinderapp/listing_detail.html', {'listing': listing})

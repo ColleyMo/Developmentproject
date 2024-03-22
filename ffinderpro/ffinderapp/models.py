@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.auth import get_user_model
 
 
 class CustomUser(AbstractUser):
@@ -32,16 +33,20 @@ class Team(models.Model):
     photo = models.ImageField(upload_to='team_photos/', null=True, blank=True)
     # Add more fields as needed
 
+User = get_user_model()
 
 class Listing(models.Model):
-    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    team = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)  # Assuming team is a custom user model
     title = models.CharField(max_length=100)
     description = models.TextField()
     requirements = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    team_photo = models.ImageField(upload_to='team_listing_photos/', null=True, blank=True)
-    # Add more fields as needed
+    location = models.CharField(max_length=100)  # Adding location field
+    photo = models.ImageField(upload_to='listing_photos/', null=True, blank=True)  # Adding photo field
+    positions = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.title
 
 class Application(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)

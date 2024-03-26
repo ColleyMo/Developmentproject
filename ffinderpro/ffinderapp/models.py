@@ -26,7 +26,6 @@ class Player(models.Model):
 class Team(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default=1)
     name = models.CharField(max_length=100)
-    location = models.CharField(max_length=255)
     league = models.CharField(max_length=100)
     league_division = models.CharField(max_length=50)
     level_on_pyramid = models.CharField(max_length=50)
@@ -41,9 +40,10 @@ class Listing(models.Model):
     description = models.TextField()
     requirements = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    location = models.CharField(max_length=100)  # Adding location field
+    location = models.CharField(max_length=100, default='') 
+    city = models.CharField(max_length=100, default='')
     photo = models.ImageField(upload_to='listing_photos/', null=True, blank=True)  # Adding photo field
-    positions = models.CharField(max_length=100)
+    positions = models.CharField(max_length=100, default='')
 
     def __str__(self):
         return self.title
@@ -62,13 +62,15 @@ class PlayerProfile(models.Model):
     address = models.CharField(max_length=255, blank=True)
     city = models.CharField(max_length=100, blank=True)
     photo = models.ImageField(upload_to='player_photos/', null=True, blank=True)
+    previous_clubs = models.TextField(null=True, blank=True)  # Example field
+    position = models.CharField(max_length=100, null=True, blank=True)
     # Add more fields specific to player profile
 
 
 class TeamProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=100)
-    location = models.CharField(max_length=255)
+    location = models.CharField(max_length=100, default='') 
     league = models.CharField(max_length=100)
     league_division = models.CharField(max_length=50)
     level_on_pyramid = models.CharField(max_length=50)

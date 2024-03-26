@@ -1,3 +1,4 @@
+from profile import Profile
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -47,3 +48,19 @@ class ListingForm(forms.ModelForm):
     class Meta:
         model = Listing
         fields = ['title', 'description', 'positions', 'location', 'photo']
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = PlayerProfile
+        fields = ['date_of_birth', 'address', 'city', 'photo']
+
+class PlayerProfileForm(forms.ModelForm):
+    class Meta:
+        model = PlayerProfile
+        fields = ['date_of_birth', 'address', 'city', 'photo', 'previous_clubs', 'position'] 
+
+class TeamProfileForm(forms.ModelForm):
+    class Meta:
+        model = TeamProfile
+        fields = ['name', 'location', 'league', 'league_division', 'level_on_pyramid', 'photo']

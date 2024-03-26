@@ -3,7 +3,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import SignUpForm, PlayerSignUpForm, TeamSignUpForm, ListingForm
+from .forms import SignUpForm, PlayerSignUpForm, TeamSignUpForm, ListingForm, ProfileUpdateForm, PlayerProfileForm, TeamProfileForm
 from .models import CustomUser, Player, PlayerProfile, TeamProfile, Listing
 
 
@@ -71,24 +71,42 @@ def team_signup(request):
     return render(request, 'ffinderapp/team_signup.html', {'form': form})
 
 
-@login_required
 def profile(request):
+    u_form = None  # Initialize u_form to None
+    p_form = None  # Initialize p_form to None
+    t_form = None  # Initialize t_form to None
+
     if hasattr(request.user, 'playerprofile'):
         player_profile = request.user.playerprofile
         if request.method == 'POST':
-            # Handle profile update form submission for players
-            pass  # Implement your logic here
+            u_form = ProfileUpdateForm(request.POST, instance=request.user)
+            p_form = PlayerProfileForm(request.POST, request.FILES, instance=player_profile)
+            if u_form.is_valid() and p_form.is_valid():
+                u_form.save()
+                p_form.save()
+                messages.success(request, 'Your profile has been updated!')
+                return redirect('profile')
+        else:
+            u_form = ProfileUpdateForm(instance=request.user)
+            p_form = PlayerProfileForm(instance=player_profile)
     elif hasattr(request.user, 'teamprofile'):
         team_profile = request.user.teamprofile
         if request.method == 'POST':
-            # Handle profile update form submission for teams
-            pass  # Implement your logic here
+            u_form = ProfileUpdateForm(request.POST, instance=request.user)
+            t_form = TeamProfileForm(request.POST, request.FILES, instance=team_profile)
+            if u_form.is_valid() and t_form.is_valid():
+                u_form.save()
+                t_form.save()
+                messages.success(request, 'Your profile has been updated!')
+                return redirect('profile')
+        else:
+            u_form = ProfileUpdateForm(instance=request.user)
+            t_form = TeamProfileForm(instance=team_profile)
     else:
         # Handle users without a specific role
         pass  # Implement your logic here
 
-    return render(request, 'ffinderapp/profile.html')
-
+    return render(request, 'ffinderapp/profile.html', {'u_form': u_form, 'p_form': p_form, 't_form': t_form})
 
 def create_listing(request):
     if request.method == 'POST':
@@ -96,11 +114,10 @@ def create_listing(request):
         if form.is_valid():
             listing = form.save(commit=False)
             listing.team = request.user
-            listing.save()
-            return redirect('ffinderapp/listing_detail', listing_id=listing.id)
+            listing.save()  # ID is automatically assigned here
+            return redirect('ffinderapp:listing_detail', listing_id=listing.id)  # Redirect to the listing detail page with the assigned ID
     else:
         form = ListingForm()
-    return render(request, 'ffinderapp/create_listing.html', {'form': form})
 
 def listing_detail(request, listing_id):
     listing = Listing.objects.get(id=listing_id)

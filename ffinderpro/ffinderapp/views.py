@@ -114,10 +114,11 @@ def create_listing(request):
         if form.is_valid():
             listing = form.save(commit=False)
             listing.team = request.user
-            listing.save()  # ID is automatically assigned here
-            return redirect('ffinderapp:listing_detail', listing_id=listing.id)  # Redirect to the listing detail page with the assigned ID
+            listing.save()
+            return redirect('listing_detail', listing_id=listing.id)
     else:
         form = ListingForm()
+    return render(request, 'ffinderapp/create_listing.html', {'form': form})
 
 def listing_detail(request, listing_id):
     listing = Listing.objects.get(id=listing_id)

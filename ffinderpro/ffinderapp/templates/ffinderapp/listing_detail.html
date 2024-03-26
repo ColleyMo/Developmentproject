@@ -1,12 +1,22 @@
 <!-- listing_detail.html -->
-{% extends 'base.html' %}
+{% extends 'ffinderapp/base.html' %}
+{% load static %}
+
 {% block content %}
-  <h2>{{ listing.title }}</h2>
-  <p>{{ listing.description }}</p>
-  <p>Positions: {{ listing.positions }}</p>
-  <p>Location: {{ listing.location }}</p>
-  {% if listing.profile_picture %}
-    <img src="{{ listing.profile_picture.url }}" alt="Profile Picture">
-  {% endif %}
-  <p>Created by: <a href="{% url 'team_profile' listing.team.id %}">{{ listing.team }}</a></p>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="card">
+        <img src="{% if listing.photo %}{{ listing.photo.url }}{% else %}{% static 'placeholder.jpg' %}{% endif %}" class="card-img-top" alt="Listing Image">
+        <div class="card-body">
+          <h5 class="card-title">{{ listing.title }}</h5>
+          <p class="card-text">{{ listing.description }}</p>
+          <p class="card-text"><small class="text-muted">Location: {{ listing.location }}</small></p>
+          <span class="border border-5"></span>
+          <!-- Add more details as needed -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

@@ -6,3 +6,8 @@ Final year development project
 
 # dependencies
 crispy forms django
+
+
+# SuperUser Username: testadmin 
+# SuperUser Password: musacolley
+

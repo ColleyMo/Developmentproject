@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
+from django.contrib.auth import login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import SignUpForm, PlayerSignUpForm, TeamSignUpForm, ListingForm, ProfileUpdateForm, PlayerProfileForm, TeamProfileForm
 from .models import CustomUser, Player, PlayerProfile, TeamProfile, Listing
 
@@ -20,18 +21,17 @@ def signup(request):
             registration_type = form.cleaned_data.get('registration_type')
             if registration_type == 'player':
                 # Create a new Player profile instance and associate it with the CustomUser
-                player_profile = Player(user_profile=custom_user.profile)
+                player_profile = Player(user=custom_user)
                 player_profile.save()
             elif registration_type == 'team':
                 # Create a new TeamProfile instance and associate it with the CustomUser
-                team_profile = TeamProfile(user=custom_user.profile, **form.cleaned_data)
+                team_profile = TeamProfile(user=custom_user, **form.cleaned_data)
                 team_profile.save()
             login(request, custom_user)
             return redirect('home')
     else:
         form = SignUpForm()
     return render(request, 'ffinderapp/signup.html', {'form': form})
-
 
 def login_view(request):
     if request.method == 'POST':
@@ -70,43 +70,99 @@ def team_signup(request):
         form = TeamSignUpForm()
     return render(request, 'ffinderapp/team_signup.html', {'form': form})
 
-
+@login_required
 def profile(request):
-    u_form = None  # Initialize u_form to None
-    p_form = None  # Initialize p_form to None
-    t_form = None  # Initialize t_form to None
+    user = request.user
+    u_form = ProfileUpdateForm(instance=user)
+    p_form = None
+    t_form = None
 
-    if hasattr(request.user, 'playerprofile'):
-        player_profile = request.user.playerprofile
-        if request.method == 'POST':
-            u_form = ProfileUpdateForm(request.POST, instance=request.user)
-            p_form = PlayerProfileForm(request.POST, request.FILES, instance=player_profile)
-            if u_form.is_valid() and p_form.is_valid():
-                u_form.save()
-                p_form.save()
-                messages.success(request, 'Your profile has been updated!')
+    if request.method == 'POST':
+        if 'player_profile_submit' in request.POST:
+            p_form = PlayerProfileForm(request.POST, request.FILES)
+            if p_form.is_valid():
+                player_profile = p_form.save(commit=False)
+                player_profile.user = user
+                player_profile.save()
+                messages.success(request, 'Your player profile has been created!')
                 return redirect('profile')
-        else:
-            u_form = ProfileUpdateForm(instance=request.user)
-            p_form = PlayerProfileForm(instance=player_profile)
-    elif hasattr(request.user, 'teamprofile'):
-        team_profile = request.user.teamprofile
-        if request.method == 'POST':
-            u_form = ProfileUpdateForm(request.POST, instance=request.user)
-            t_form = TeamProfileForm(request.POST, request.FILES, instance=team_profile)
-            if u_form.is_valid() and t_form.is_valid():
-                u_form.save()
-                t_form.save()
-                messages.success(request, 'Your profile has been updated!')
+        elif 'team_profile_submit' in request.POST:
+            t_form = TeamProfileForm(request.POST, request.FILES)
+            if t_form.is_valid():
+                team_profile = t_form.save(commit=False)
+                team_profile.user = user
+                team_profile.save()
+                messages.success(request, 'Your team profile has been created!')
                 return redirect('profile')
-        else:
-            u_form = ProfileUpdateForm(instance=request.user)
-            t_form = TeamProfileForm(instance=team_profile)
     else:
-        # Handle users without a specific role
-        pass  # Implement your logic here
+        if hasattr(user, 'playerprofile'):
+            player_profile = user.playerprofile
+            p_form = PlayerProfileForm(instance=player_profile)
+        else:
+            p_form = PlayerProfileForm()
+
+        if hasattr(user, 'teamprofile'):
+            team_profile = user.teamprofile
+            t_form = TeamProfileForm(instance=team_profile)
+        else:
+            t_form = TeamProfileForm()
 
     return render(request, 'ffinderapp/profile.html', {'u_form': u_form, 'p_form': p_form, 't_form': t_form})
+    
+def player_profile(request):
+    user = request.user
+    u_form = ProfileUpdateForm(instance=user)
+    p_form = None
+
+    if hasattr(user, 'playerprofile'):
+        player_profile = user.playerprofile
+        p_form = PlayerProfileForm(instance=player_profile)
+    elif request.method == 'POST':
+        p_form = PlayerProfileForm(request.POST, request.FILES)
+        if p_form.is_valid():
+            player_profile = p_form.save(commit=False)
+            player_profile.user = user
+            player_profile.save()
+            messages.success(request, 'Your player profile has been created!')
+            return redirect('player_profile')
+    else:
+        p_form = PlayerProfileForm()
+
+    return render(request, 'ffinderapp/playerprofile.html', {'u_form': u_form, 'p_form': p_form})
+
+def team_profile(request):
+    user = request.user
+    u_form = ProfileUpdateForm(instance=user)
+    t_form = None
+
+    if isinstance(user, get_user_model()):  # Ensure user is CustomUser instance
+        if hasattr(user, 'teamprofile'):
+            team_profile = user.teamprofile
+            t_form = TeamProfileForm(instance=team_profile)
+        elif request.method == 'POST':
+            t_form = TeamProfileForm(request.POST, request.FILES)
+            if t_form.is_valid():
+                team_profile = t_form.save(commit=False)
+                # Ensure that user is an instance of CustomUser
+                if isinstance(user, get_user_model()):
+                    team_profile.user = user
+                    team_profile.save()
+                    messages.success(request, 'Your team profile has been created!')
+                    return redirect('team_profile')
+                else:
+                    # Handle the case where user is not an instance of CustomUser
+                    # This could be due to authentication issues or misconfiguration
+                    # You can log an error, redirect the user, or handle it differently based on your application's requirements
+                    pass
+        else:
+            t_form = TeamProfileForm()
+    else:
+        # Handle the case where user is not a CustomUser instance
+        # This could be due to authentication issues or misconfiguration
+        # You can log an error, redirect the user, or handle it differently based on your application's requirements
+        pass
+
+    return render(request, 'ffinderapp/teamprofile.html', {'u_form': u_form, 't_form': t_form})
 
 def create_listing(request):
     if request.method == 'POST':
@@ -123,3 +179,29 @@ def create_listing(request):
 def listing_detail(request, listing_id):
     listing = Listing.objects.get(id=listing_id)
     return render(request, 'ffinderapp/listing_detail.html', {'listing': listing})
+
+def all_listings(request):
+    search_query = request.GET.get('search')
+    listings = Listing.objects.all()
+
+    # Filtering logic based on user input
+    if search_query:
+        listings = listings.filter(title__icontains=search_query)
+        
+    # Implement this based on your specific filtering requirements
+
+    paginator = Paginator(listings, 10)  # 10 listings per page
+    page_number = request.GET.get('page')
+    try:
+        listings_page = paginator.page(page_number)
+    except PageNotAnInteger:
+        listings_page = paginator.page(1)
+    except EmptyPage:
+        listings_page = paginator.page(paginator.num_pages)
+
+    return render(request, 'ffinderapp/all_listings.html', {'listings': listings_page})
+
+def my_listings(request):
+    user = request.user
+    listings = user.listing_set.all()
+    return render(request, 'ffinderapp/my_listings.html', {'listings': listings})

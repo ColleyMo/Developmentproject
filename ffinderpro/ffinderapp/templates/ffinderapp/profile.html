@@ -1,8 +1,7 @@
 {% extends 'ffinderapp/base.html' %}
 {% load crispy_forms_tags %}
+
 {% load static %}
-
-
 {% block content %}
 <div class="col-md-12">
     <div class="content-section">
@@ -48,29 +47,65 @@
         {% endif %}
 
         <!-- Additional sections for other user roles -->
-
-        <form method="POST" enctype="multipart/form-data">
+        <form id="update-form" method="POST" enctype="multipart/form-data" style="display: none;">
             {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">User Profile</legend>
-                {{ u_form|crispy }}
-            </fieldset>
-            {% if user.player %}
+            <!-- Form fields go here -->
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
                 <fieldset class="form-group">
-                    <legend class="border-bottom mb-4">Player Profile</legend>
-                    {{ p_form|crispy }}
+                    <legend class="border-bottom mb-4">User Profile</legend>
+                    {{ u_form|crispy }}
                 </fieldset>
-            {% endif %}
-            {% if user.team %}
-                <fieldset class="form-group">
-                    <legend class="border-bottom mb-4">Team Profile</legend>
-                    {{ t_form|crispy }}
-                </fieldset>
-            {% endif %}
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Update</button>
-            </div>
+                {% if user.player %}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">Player Profile</legend>
+                        {{ p_form|crispy }}
+                    </fieldset>
+                {% endif %}
+                {% if user.team %}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">Team Profile</legend>
+                        {{ t_form|crispy }}
+                    </fieldset>
+                {% endif %}
+                <div class="form-group">
+                    <button class="btn btn-outline-info" type="submit">Update</button>
+                </div>
+            </form>
         </form>
+        
+        <button id="update-button" class="btn btn-outline-info">Update Profile</button>
+        
+        <script>
+            document.getElementById('update-button').addEventListener('click', function() {
+                var form = document.getElementById('update-form');
+                if (form.style.display === 'none') {
+                    form.style.display = 'block';
+                } else {
+                    form.style.display = 'none';
+                }
+            });
+        </script>
+
+        <div class="mt-5">
+            <h3>My Listings</h3>
+            <div class="row">
+                {% for listing in user.listing_set.all %}
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ listing.title }}</h5>
+                            <!-- Display other listing details as needed -->
+                            <p class="card-text">{{ listing.description }}</p>
+                            <a href="{% url 'listing_detail' listing.id %}" class="btn btn-primary">View Listing Detail</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
     </div>
 </div>
+
 {% endblock content %}

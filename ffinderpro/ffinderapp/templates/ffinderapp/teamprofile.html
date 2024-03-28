@@ -1,0 +1,21 @@
+{% extends 'ffinderapp/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="col-md-12">
+    <div class="content-section">
+        <div class="media">
+            <!-- Team profile details -->
+        </div>
+        <!-- Team profile forms -->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- Team profile form fields -->
+            {{ t_form|crispy }}
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Update Profile</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -2,7 +2,7 @@ from profile import Profile
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import PlayerProfile, TeamProfile, Listing
+from .models import PlayerProfile, TeamProfile, Listing, CustomUser
 
 
 class SignUpForm(UserCreationForm):
@@ -51,15 +51,23 @@ class ListingForm(forms.ModelForm):
 
 
 class ProfileUpdateForm(forms.ModelForm):
+    date_of_birth = forms.DateField(
+        widget=forms.widgets.DateInput(attrs={'type': 'date'}),
+        help_text='Enter your date of birth'
+    )
     class Meta:
         model = PlayerProfile
         fields = ['date_of_birth', 'address', 'city', 'photo']
 
 class PlayerProfileForm(forms.ModelForm):
+    date_of_birth = forms.DateField(
+        widget=forms.widgets.DateInput(attrs={'type': 'date'}),
+        help_text='Enter your date of birth'
+    )
     class Meta:
-        model = PlayerProfile
-        fields = ['date_of_birth', 'address', 'city', 'photo', 'previous_clubs', 'position'] 
-
+        model = CustomUser
+        fields = ['photo']
+ 
 class TeamProfileForm(forms.ModelForm):
     class Meta:
         model = TeamProfile

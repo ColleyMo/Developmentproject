@@ -1,0 +1,48 @@
+<!-- all_listings.html -->
+{% extends "ffinderapp/base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+  <h2>All Listings</h2>
+  <div class="row">
+      {% for listing in listings %}
+      <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+              {% if listing.photo %}
+              <img src="{{ listing.photo.url }}" class="card-img-top" alt="{{ listing.title }}">
+              {% else %}
+              <div class="placeholder-image">No Photo Available</div>
+              {% endif %}
+              <div class="card-body">
+                  <h5 class="card-title">{{ listing.title }}</h5>
+                  <p class="card-text">{{ listing.description }}</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                      <div class="btn-group">
+                          <a href="{% url 'listing_detail' listing.id %}" class="btn btn-sm btn-outline-secondary">View Details</a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      {% endfor %}
+  </div>
+</div>
+
+
+  <!-- Pagination links -->
+  <div class="pagination">
+    <span class="step-links">
+      {% if listings.has_previous %}
+        <a href="?page=1">&laquo; first</a>
+        <a href="?page={{ listings.previous_page_number }}">previous</a>
+      {% endif %}
+      <span class="current">
+        Page {{ listings.number }} of {{ listings.paginator.num_pages }}.
+      </span>
+      {% if listings.has_next %}
+        <a href="?page={{ listings.next_page_number }}">next</a>
+        <a href="?page={{ listings.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+    </span>
+  </div>
+{% endblock %}

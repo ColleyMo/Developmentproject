@@ -4,22 +4,37 @@
 {% load static %}
 {% block content %}
 
-    <!-- Search section -->
-    <section class="search-section">
+    <!-- Hero image section -->
+    <section class="hero-section">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <form class="search-form" method="GET" action="{% url 'all_listings' %}">
-                        {% csrf_token %}
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Search..." name="search">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="submit">Search</button>
-                            </div>
-                        </div>
-                    </form>
+            <div class="row justify-content-center align-items-center">
+                <div class="col-md-6 text-center">
+                    <h1>Welcome to Football Finder</h1>
+                    <p>Your ultimate destination for finding football players and teams</p>
+                    <a href="#search-section" class="btn btn-primary btn-lg">Search Now</a>
                 </div>
             </div>
         </div>
     </section>
+
+
+  <!-- Search section -->
+  <section class="search-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <form class="search-form" method="GET" action="{% url 'all_listings' %}">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control custom-input" placeholder="Search..." name="search">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary custom-btn" type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
 {% endblock %}

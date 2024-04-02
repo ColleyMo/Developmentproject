@@ -107,7 +107,7 @@ def profile(request):
         else:
             t_form = TeamProfileForm()
 
-    return render(request, 'ffinderapp/profile.html', {'u_form': u_form, 'p_form': p_form, 't_form': t_form})
+    return render(request, 'ffinderapp/profile.html', {'u_form': u_form, 'p_form': p_form, 't_form': t_form, 'user': user})
     
 def player_profile(request):
     user = request.user

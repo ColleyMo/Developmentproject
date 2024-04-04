@@ -1,7 +1,14 @@
 <!-- all_listings.html -->
 {% extends "ffinderapp/base.html" %}
+{% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
+
+<form class="search-bar" method="get">
+  <input type="text" name="search" placeholder="Search by title, position, or location">
+  <button type="submit">Search</button>
+</form>
+
 <div class="container">
   <h2>All Listings</h2>
   <div class="row">
@@ -11,11 +18,14 @@
               {% if listing.photo %}
               <img src="{{ listing.photo.url }}" class="card-img-top" alt="{{ listing.title }}">
               {% else %}
-              <div class="placeholder-image">No Photo Available</div>
+              <div class="placeholder-image">
+                  <img src="{% static 'media/logo.jpeg' %}" alt="No Photo Available"> 
+              </div> 
               {% endif %}
               <div class="card-body">
                   <h5 class="card-title">{{ listing.title }}</h5>
-                  
+                  <p>{{ listing.position }}</p>
+                  <p>{{ listing.location }}</p>
                   <div class="d-flex justify-content-between align-items-center">
                       <div class="btn-group">
                           <a href="{% url 'listing_detail' listing.id %}" class="btn btn-sm btn-outline-secondary">View Details</a>
@@ -26,23 +36,23 @@
       </div>
       {% endfor %}
   </div>
-</div>
-
 
   <!-- Pagination links -->
   <div class="pagination">
-    <span class="step-links">
-      {% if listings.has_previous %}
-        <a href="?page=1">&laquo; first</a>
-        <a href="?page={{ listings.previous_page_number }}">previous</a>
-      {% endif %}
-      <span class="current">
-        Page {{ listings.number }} of {{ listings.paginator.num_pages }}.
+      <span class="step-links">
+          {% if listings.has_previous %}
+          <a href="?page=1">&laquo; first</a>
+          <a href="?page={{ listings.previous_page_number }}">previous</a>
+          {% endif %}
+          <span class="current">
+              Page {{ listings.number }} of {{ listings.paginator.num_pages }}.
+          </span>
+          {% if listings.has_next %}
+          <a href="?page={{ listings.next_page_number }}">next</a>
+          <a href="?page={{ listings.paginator.num_pages }}">last &raquo;</a>
+          {% endif %}
       </span>
-      {% if listings.has_next %}
-        <a href="?page={{ listings.next_page_number }}">next</a>
-        <a href="?page={{ listings.paginator.num_pages }}">last &raquo;</a>
-      {% endif %}
-    </span>
   </div>
+</div>
+
 {% endblock %}

@@ -18,7 +18,9 @@ urlpatterns = [
     path('my-listings', views.my_listings, name='my_listings'),
     path('player-profile/', player_profile, name='player_profile'),
     path('team-profile/', team_profile, name='team_profile'),
-    path('profile/<str:username>/', views.profile, name='profile')
+    #path('profile/<str:username>/', views.profile, name='profile'),
+    path('edit-listing/<int:listing_id>/', views.edit_listing, name='edit_listing'),
+    path('delete-listing/<int:listing_id>/', views.delete_listing, name='delete_listing'),
     
 
-] 
+]

@@ -1,4 +1,3 @@
-<!-- listing_detail.html -->
 {% extends 'ffinderapp/base.html' %}
 {% load static %}
 
@@ -7,7 +6,7 @@
   <div class="row">
     <div class="col-md-6 offset-md-3">
       <div class="card">
-        <img src="{% if listing.photo %}{{ listing.photo.url }}{% else %}{% static 'placeholder.jpg' %}{% endif %}" class="card-img-top" alt="Listing Image">
+        <img src="{% if listing.photo %}{{ listing.photo.url }}{% else %}{% static 'media/logo.jpeg' %}{% endif %}" class="card-img-top" alt="Listing Image">
         <div class="card-body">
           <h5 class="card-title">{{ listing.title }}</h5>
           <p class="card-text">{{ listing.description }}</p>
@@ -16,7 +15,14 @@
           <!-- Add more details as needed -->
         </div>
       </div>
+      <button class="btn btn-primary mt-3" onclick="goBack()">Go Back</button>
     </div>
   </div>
 </div>
+
+<script>
+function goBack() {
+  window.history.back();
+}
+</script>
 {% endblock %}

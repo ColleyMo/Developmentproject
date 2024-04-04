@@ -2,7 +2,7 @@ from profile import Profile
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import PlayerProfile, TeamProfile, Listing, CustomUser
+from .models import PlayerProfile, TeamProfile, Listing, CustomUser, Listing
 
 
 class SignUpForm(UserCreationForm):

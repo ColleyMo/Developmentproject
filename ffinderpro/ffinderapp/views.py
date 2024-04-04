@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -6,6 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import SignUpForm, PlayerSignUpForm, TeamSignUpForm, ListingForm, ProfileUpdateForm, PlayerProfileForm, TeamProfileForm
 from .models import CustomUser, Player, PlayerProfile, TeamProfile, Listing
+from django.db.models import Q
 
 
 def home(request):
@@ -186,7 +187,9 @@ def all_listings(request):
 
     # Filtering logic based on user input
     if search_query:
-        listings = listings.filter(title__icontains=search_query)
+        listings = listings.filter(Q(title__icontains=search_query) |
+            Q(positions__icontains=search_query) |
+            Q(location__icontains=search_query))
         
     # Implement this based on your specific filtering requirements
 
@@ -205,3 +208,21 @@ def my_listings(request):
     user = request.user
     listings = user.listing_set.all()
     return render(request, 'ffinderapp/my_listings.html', {'listings': listings})
+
+def edit_listing(request, listing_id):
+    listing = get_object_or_404(Listing, id=listing_id)
+    if request.method == 'POST':
+        form = ListingForm(request.POST, instance=listing)
+        if form.is_valid():
+            form.save()
+            return redirect('listing_detail', listing_id=listing_id)
+    else:
+        form = ListingForm(instance=listing)
+    return render(request, 'ffinderapp/edit_listing.html', {'form': form})
+
+def delete_listing(request, listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id)
+    if request.method == 'POST':
+        listing.delete()
+        return redirect('profile')  # Redirect to profile page after deleting
+    return render(request, 'confirm_delete_listing.html', {'listing': listing})

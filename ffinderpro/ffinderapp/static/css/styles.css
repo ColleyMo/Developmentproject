@@ -245,6 +245,161 @@ html {
   background-color: #0056b3; /* Darker blue color on hover */
 }
 
+@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 40px; /* Adjusted padding */
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .logo {
+    color: #fff;
+    font-size: 24px; /* Adjusted font size */
+    font-weight: 600; /* Adjusted font weight */
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.toggle {
+    display: none; /* Hide toggle button */
+}
+
+.showcase {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    padding: 100px 100px; /* Adjusted padding */
+    display: flex;
+    flex-direction: column; /* Adjusted to stack content */
+    justify-content: center; /* Adjusted to center content vertically */
+    align-items: center;
+    background: #111;
+    transition: 0.5s;
+    z-index: 2;
+}
+
+.showcase video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #014ec3;
+    mix-blend-mode: overlay;
+}
+
+.text {
+    position: relative;
+    z-index: 10;
+    text-align: center; /* Center text */
+    color: #fff; /* Adjusted text color */
+}
+
+.text h2 {
+    font-size: 3em; /* Adjusted font size */
+    font-weight: 700; /* Adjusted font weight */
+    text-transform: uppercase;
+    color: #fff; /* Adjusted text color */
+}
+
+.text h3 {
+    font-size: 2.5em; /* Adjusted font size */
+    font-weight: 500; /* Adjusted font weight */
+    text-transform: uppercase;
+    color: #f80cfc; /* Adjusted text color */
+}
+
+.text p {
+    font-size: 1em; /* Adjusted font size */
+    margin: 20px 0;
+    font-weight: 400;
+    max-width: 700px;
+}
+
+.text a {
+    display: inline-block;
+    font-size: 1em;
+    background: #fff;
+    padding: 10px 30px;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 500;
+    margin-top: 10px;
+    color: #111;
+    letter-spacing: 1px; /* Adjusted letter spacing */
+    transition: 0.2s;
+}
+
+.text a:hover {
+    letter-spacing: 3px; /* Adjusted letter spacing */
+}
+
+.social {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Adjusted margin */
+}
+
+.social li {
+    list-style: none;
+}
+
+.social li a {
+    display: inline-block;
+    margin-right: 20px;
+    filter: invert(1);
+    transform: scale(0.8); /* Adjusted scale */
+    transition: 0.5s;
+}
+
+.social li a:hover {
+    transform: scale(0.8) translateY(-5px); /* Adjusted translateY */
+}
+
+.menu {
+    display: none; /* Hide menu */
+}
+
+@media (max-width: 991px) {
+    header,
+    .showcase {
+        padding: 20px; /* Adjusted padding */
+    }
+
+    .text h2 {
+        font-size: 2em; /* Adjusted font size */
+    }
+
+    .text h3 {
+        font-size: 1.5em; /* Adjusted font size */
+    }
+}
+
   
   .footer {
     position: absolute;

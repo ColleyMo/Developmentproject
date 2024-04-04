@@ -1,40 +1,24 @@
 {% extends 'ffinderapp/base.html' %}
-{% load crispy_forms_tags %}
-
 {% load static %}
 {% block content %}
 
-    <!-- Hero image section -->
-    <section class="hero-section">
-        <div class="container">
-            <div class="row justify-content-center align-items-center">
-                <div class="col-md-6 text-center">
-                    <h1>Welcome to Football Finder </h1>
-                    <p>Your ultimate destination for finding football players and teams</p>
-                    <a href="#search-section" class="btn btn-primary btn-lg">Search Now</a>
-                </div>
-            </div>
+<section class="showcase">
+    <main>
+        <!-- main content of the page -->
+        <video src="{% static 'media/video1.mp4' %}" muted loop autoplay></video>
+        <div class="overlay"></div>
+        <div class="text">
+            <h2>Welcome to Football Finder</h2>
+            <h3>Your ultimate destination for finding football players and teams</h3>
+            <p>Whether you're a player looking for a team or a team in need of players, Football Finder is here to help. With our comprehensive search functionality, you can easily find the perfect match for your football needs. Get started today and take your game to the next level!</p>
+            <a href="{% url 'all_listings' %}">find clubs...</a>
         </div>
-    </section>
-
-
-  <!-- Search section -->
-  <section class="search-section">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <form class="search-form" method="GET" action="{% url 'all_listings' %}">
-                    {% csrf_token %}
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control custom-input" placeholder="Search..." name="search">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary custom-btn" type="submit">Search</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+        <ul class="social">
+            <li><a href="#"><img src="https://i.ibb.co/x7P24fL/facebook.png"></a></li>
+            <li><a href="#"><img src="https://i.ibb.co/Wnxq2Nq/twitter.png"></a></li>
+            <li><a href="#"><img src="https://i.ibb.co/ySwtH4B/instagram.png"></a></li>
+        </ul>
+    </main>
 </section>
 
 {% endblock %}

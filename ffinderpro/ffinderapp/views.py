@@ -7,6 +7,14 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import SignUpForm, PlayerSignUpForm, TeamSignUpForm, ListingForm, ProfileUpdateForm, PlayerProfileForm, TeamProfileForm
 from .models import CustomUser, Player, PlayerProfile, TeamProfile, Listing
 from django.db.models import Q
+from django.core.mail import send_mail
+from django.conf import settings
+#from .models import Message
+from django.http import HttpResponse
+from django.views.generic import View
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+import json
 
 
 def home(request):
@@ -226,3 +234,71 @@ def delete_listing(request, listing_id):
         listing.delete()
         return redirect('profile')  # Redirect to profile page after deleting
     return render(request, 'confirm_delete_listing.html', {'listing': listing})
+
+
+"""
+def contact_poster(request):
+    if request.method == 'POST':
+        message_content = request.POST.get('message')
+        sender_email = request.POST.get('contactEmail')
+        listing_id = request.POST.get('listing_id')  # Assuming you have a hidden input field for listing ID in your form
+
+        # Save message to database
+        message = Message.objects.create(
+            content=message_content,
+            sender_email=sender_email,
+            listing_id=listing_id
+        )
+
+        # Send email notification to poster
+        send_mail(
+            'New message from Football Finder',
+            f'You have received a new message from {sender_email}:\n\n{message_content}',
+            settings.EMAIL_HOST_USER,  # Sender's email
+            ['colley23m@gmail.com'],  # Poster's email (change to actual email address)
+            fail_silently=False,
+        )
+
+        return redirect('home')  # Redirect to homepage after sending message
+
+    return render(request, 'ffinderapp/contact_poster.html')
+"""
+
+class ChatView(View):
+    def get(self, request):
+        return render(request, 'chat.html')
+
+    def post(self, request):
+        # Handle form submission or any other POST requests
+        pass
+
+class ChatConsumerView(View):
+    def post(self, request):
+        # Handle HTTP POST requests for WebSocket messages
+        pass
+
+    def websocket_connect(self, message):
+        # Accept the WebSocket connection
+        message.reply_channel.send({'accept': True})
+
+    def websocket_receive(self, message):
+        # Handle incoming WebSocket messages
+        text = message.content['text']
+        data = json.loads(text)
+
+        # Broadcast the received message to all WebSocket clients
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            'chat_group',
+            {
+                'type': 'chat_message',
+                'message': data['message']
+            }
+        )
+
+    def chat_message(self, event):
+        # Send the received message to WebSocket clients
+        message = event['message']
+        self.send(text_data=json.dumps({
+            'message': message
+        }))

@@ -86,3 +86,14 @@ class TeamProfile(models.Model):
     level_on_pyramid = models.CharField(max_length=50)
     photo = models.ImageField(upload_to='media/team_profile_photos/', default='/Users/mcolley/Developmentproject/ffinderpro/ffinderapp/static/media/logo.jpeg', null=True, blank=True)
     # Add more fields specific to team profile
+
+
+class Message(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
+    subject = models.CharField(max_length=200)
+    body = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"From {self.sender.username} to {self.receiver.username}: {self.subject}"

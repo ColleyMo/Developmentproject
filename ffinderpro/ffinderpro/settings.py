@@ -24,6 +24,12 @@ SECRET_KEY = "django-insecure-4r%7==)21p5#8(@$e#a!%7-a67t5$z9)3#mta&71k5oke((q6e
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'colley23m@gmail.com'
+EMAIL_HOST_PASSWORD = 'musacolley'
+EMAIL_PORT =  587
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = []
 
 ALLOWED_HOSTS = []
 
@@ -40,6 +46,7 @@ INSTALLED_APPS = [
     'ffinderapp',
     'crispy_forms',
     'crispy_bootstrap4',
+    'channels',
     
 ]
 
@@ -138,4 +145,26 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'profile'
 
 LOGOUT_REDIRECT_URL = 'login'
+
+
+
+# Pusher config
+
+PUSHER_APP_ID = '1782542'
+PUSHER_KEY = '97a2d5ce6683ca1e8040'
+PUSHER_SECRET = 'e64d69dcdd15c09d4cb5'
+PUSHER_CLUSTER = 'eu'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_pusher.core.PusherChannelLayer',
+        'CONFIG': {
+            'key': PUSHER_KEY,
+            'secret': PUSHER_SECRET,
+            'app_id': PUSHER_APP_ID,
+            'cluster': PUSHER_CLUSTER,
+            'ssl': True,
+        },
+    },
+}
 

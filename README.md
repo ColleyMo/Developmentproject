@@ -8,6 +8,6 @@ Final year development project
 crispy forms django
 
 
-# SuperUser Username: testadmin 
-# SuperUser Password: musacolley
+# SuperUser Username:  
+# SuperUser Password:
 

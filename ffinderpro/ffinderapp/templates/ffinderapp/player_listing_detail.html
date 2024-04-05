@@ -8,7 +8,7 @@
   <div class="row">
     <div class="col-md-6 offset-md-3">
       <div class="card">
-        <img src="{% if player_listing.photo %}{{ player_listing.photo.url }}{% else %}{% static 'media/default_player_image.jpg' %}{% endif %}" class="card-img-top" alt="Player Listing Image">
+        <img src="{% if player_listing.photo %}{{ player_listing.photo.url }}{% else %}{% static 'media/default.png' %}{% endif %}" class="card-img-top" alt="Player Listing Image">
         <div class="card-body">
           <h5 class="card-title">{{ player_listing.name }}</h5>
           <p class="card-text">{{ player_listing.position }}</p>

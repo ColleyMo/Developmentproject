@@ -21,6 +21,13 @@ urlpatterns = [
     #path('profile/<str:username>/', views.profile, name='profile'),
     path('edit-listing/<int:listing_id>/', views.edit_listing, name='edit_listing'),
     path('delete-listing/<int:listing_id>/', views.delete_listing, name='delete_listing'),
+    path('path/to/endpoint', views.ajax_view, name='ajax_endpoint'),
+    path('send-message/', views.send_message, name='send_message'),
+    path('get-messages/', views.get_messages, name='get_messages'),
+    path('player_listing/<int:pk>/', views.player_listing_detail, name='player_listing_detail'),
+    path('create_player_listing/', views.create_player_listing, name='create_player_listing'),
+    path('find_players/', views.find_players, name='find_players'),
+    path('post_ad/', views.post_ad, name='post_ad'),
     
 
 ]

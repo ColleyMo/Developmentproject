@@ -1,0 +1,57 @@
+{% extends 'ffinderapp/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+  <form class="search-bar" method="get">
+    <input type="text" name="search" placeholder="Search by title, position, or location">
+    <button type="submit">Search</button>
+  </form>
+
+  <h2 class="mt-4 mb-3">Find Players</h2>
+  <div class="row">
+    {% for player_listing in player_listings %}
+    <div class="col-md-4">
+      <div class="card mb-4 shadow-sm">
+        {% if player_listing.photo %}
+        <img src="{{ player_listing.photo.url }}" class="card-img-top" alt="{{ player_listing.title }}">
+        {% else %}
+        <div class="placeholder-image">
+          <img src="{% static 'media/default.png' %}" alt="No Photo Available"> 
+        </div> 
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ player_listing.title }}</h5>
+          <p class="card-text">{{ player_listing.position }}</p>
+          <!-- Add more details if needed -->
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="btn-group">
+              <a href="{% url 'player_listing_detail' player_listing.id %}" class="btn btn-sm btn-outline-secondary">View Details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination links -->
+  <div class="pagination mt-4">
+    <span class="step-links">
+      {% if listings.has_previous %}
+      <a href="?page=1">&laquo; first</a>
+      <a href="?page={{ listings.previous_page_number }}">previous</a>
+      {% endif %}
+      <span class="current">
+        Page {{ listings.number }} of {{ listings.paginator.num_pages }}.
+      </span>
+      {% if listings.has_next %}
+      <a href="?page={{ listings.next_page_number }}">next</a>
+      <a href="?page={{ listings.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+    </span>
+  </div>
+</div>
+
+{% endblock %}

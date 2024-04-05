@@ -1,5 +1,6 @@
-{% extends "ffinderapp/base.html" %}
-{% load static %}
+<!-- create_player_listing.html -->
+
+{% extends 'ffinderapp/base.html' %}
 {% load crispy_forms_tags %}
 
 {% block content %}
@@ -14,7 +15,7 @@
         <div class="col-md-6 offset-md-3">
           <div class="card">
             <div class="card-body">
-              <h2>Create Listing</h2>
+              <h2>Create Player Listing</h2>
               <form method="post">
                 {% csrf_token %}
                 {{ form|crispy }}

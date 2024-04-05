@@ -89,11 +89,17 @@ class TeamProfile(models.Model):
 
 
 class Message(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
-    subject = models.CharField(max_length=200)
-    body = models.TextField()
+    sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
+    recipient = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+    content = models.TextField()
 
     def __str__(self):
-        return f"From {self.sender.username} to {self.receiver.username}: {self.subject}"
+        return f'{self.sender} -> {self.recipient}: {self.content}'
+    
+
+class PlayerListing(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    position = models.CharField(max_length=50)
+    # Add more fields as needed

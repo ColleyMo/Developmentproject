@@ -2,7 +2,7 @@ from profile import Profile
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import PlayerProfile, TeamProfile, Listing, CustomUser, Listing
+from .models import PlayerProfile, TeamProfile, Listing, CustomUser, Listing, PlayerListing
 
 
 class SignUpForm(UserCreationForm):
@@ -72,3 +72,10 @@ class TeamProfileForm(forms.ModelForm):
     class Meta:
         model = TeamProfile
         fields = ['name', 'location', 'league', 'league_division', 'level_on_pyramid', 'photo']
+
+
+class PlayerListingForm(forms.ModelForm):
+    class Meta:
+        model = PlayerListing
+        fields = ['title', 'description', 'position']
+        # Add more fields as needed

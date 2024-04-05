@@ -4,12 +4,14 @@
 {% load static %}
 {% block content %}
 
-<form class="search-bar" method="get">
-  <input type="text" name="search" placeholder="Search by title, position, or location">
-  <button type="submit">Search</button>
-</form>
 
 <div class="container">
+    <form class="search-bar" method="get">
+        <input type="text" name="search" placeholder="Search by title, position, or location">
+        <button type="submit">Search</button>
+      </form>
+      
+
   <h2>All Listings</h2>
   <div class="row">
       {% for listing in listings %}

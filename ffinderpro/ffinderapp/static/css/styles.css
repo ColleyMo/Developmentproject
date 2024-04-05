@@ -23,47 +23,43 @@ h6 {
 
 ul {
   margin: 0;
+  padding: 0; /* Add padding to remove default padding */
 }
-
-.hero {
-  position: relative;
-  height: 100vh; /* Cover the entire viewport */
-  background-size: cover;
-  background-position: center;
-  color: #ffffff; /* Text color */
-  text-align: center;
-  padding: 100px 0; /* Adjust padding as needed */
-}
-
-.hero-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.hero-section {
-background-image: url("{% static 'media/image.jpeg' %}");
-background-size: cover;
-background-position: center;
-padding: 100px 0;
-color: #006eff;
-text-align: center;
-}
-
-.hero-section h1 {
-font-size: 48px;
-margin-bottom: 20px;
-}
-
-.hero-section p {
-font-size: 20px;
-margin-bottom: 30px;
-}
-
 
 .bg-steel {
   background-color: #008bee;
+}
+
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.site-header .container {
+  padding: 7px 5px;
+}
+
+.site-header .navbar-brand {
+  font-size: 24px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.site-header .navbar-toggler {
+  border: none;
+}
+
+.site-header .navbar-nav {
+  margin-left: auto;
+  color: #014ec3;
+}
+
+.site-header .navbar-nav .nav-item {
+  margin-left: 20px; /* Adjust spacing between nav items */
 }
 
 .site-header .navbar-nav .nav-link {
@@ -71,225 +67,20 @@ margin-bottom: 30px;
 }
 
 .site-header .navbar-nav .nav-link:hover {
-  color: #ffffff;
-}
-
-.site-header .navbar-nav .nav-link.active {
-  font-weight: 500;
-  color: #e391f5;
-
-}
-
-.content-section {
-  background: #ffffff;
-  padding: 10px 20px;
-  border: 1px solid #dddddd;
-  border-radius: 3px;
-  margin-bottom: 20px;
-}
-
-.article-title {
-  color: #444444;
-}
-
-a.article-title:hover {
-  color: #428bca;
-  text-decoration: none;
-}
-
-.article-content {
-  white-space: pre-line;
-}
-
-.article-img {
-  height: 65px;
-  width: 65px;
-  margin-right: 16px;
-}
-
-.article-metadata {
-  padding-bottom: 1px;
-  margin-bottom: 4px;
-  border-bottom: 1px solid #e3e3e3
-}
-
-.article-svg {
-  width: 25px;
-  height: 25px;
-  vertical-align: middle;
-}
-
-.account-img {
-  height: 125px;
-  width: 125px;
-  margin-right: 20px;
-  margin-bottom: 16px;
-}
-
-.account-heading {
-  font-size: 2.5rem;
-}
-
-.article-metadata a:hover {
-  color: #333;
-  text-decoration: none;
-}
-
-.search-section {
-  text-align: center; /* Center the content horizontally */
-  margin-top: 50px; /* Adjust the margin top as needed */
-}
-
-.custom-input {
-  padding: 15px;
-  font-size: 18px;
-  border-radius: 10px;
-  border: 2px solid #ccc;
-  width: 100%; /* Make the input field full width */
-}
-
-.custom-btn {
-  padding: 15px 20px;
-  font-size: 18px;
-  border-radius: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.custom-btn:hover {
-  background-color: #0056b3;
-}
-
-/* Style for container */
-.container {
-margin-top: 20px;
-}
-
-/* Style for heading */
-.container h2 {
-margin-bottom: 20px;
-}
-
-/* Style for card */
-.card {
-margin-bottom: 20px;
-display: table;
-width: 100%;
-
-}
-
-/* Style for card image */
-.card-img-top {
-max-width: 100%; /* Set maximum width to fit within the card */
-height: auto; /* Maintain aspect ratio */
-}
-
-/* Style for placeholder image */
-.placeholder-image img {
-max-width: 50%; /* Set maximum width to fit within the placeholder */
-height: auto; /* Maintain aspect ratio */
-}
-
-/* Style for card title */
-.card-title {
-font-size: 18px;
-font-weight: bold;
-margin-bottom: 10px;
-}
-
-/* Style for card text */
-.card-text {
-font-size: 16px;
-}
-
-/* Style for buttons */
-.btn {
-font-size: 14px;
-}
-
-.btn-view-details {
-font-size: 14px;
-padding: 6px 12px;
-border: 1px solid #6c757d;
-border-radius: 4px;
-background-color: transparent;
-color: #ea0101;
-text-decoration: none;
-}
-
-.btn-view-details:hover {
-background-color: #ff00bb;
-color: #ffffff;
-}
-
-/* Style for search bar */
-.search-bar {
-float: right; /* Align to the right */
-margin-right: 20px; /* Adjust margin as needed */
-}
-
-/* Style for search button */
-.search-button {
-background-color: #007bff; /* Blue color */
-color: #fff; /* White text */
-border: none;
-padding: 10px 20px;
-border-radius: 5px;
-cursor: pointer;
-}
-
-.search-button:hover {
-background-color: #0056b3; /* Darker blue color on hover */
-}
-
-@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-
-header {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 20px 40px; /* Adjusted padding */
-  z-index: 1000;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-header .logo {
-  color: #fff;
-  font-size: 24px; /* Adjusted font size */
-  font-weight: 600; /* Adjusted font weight */
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.toggle {
-  display: none; /* Hide toggle button */
+  color: #ff00e6;
 }
 
 .showcase {
   position: relative;
-  width: 100%;
+  height: 100%;
+  width: 100vw;
   min-height: 100vh;
-  padding: 100px 100px; /* Adjusted padding */
   display: flex;
-  flex-direction: column; /* Adjusted to stack content */
-  justify-content: center; /* Adjusted to center content vertically */
+  justify-content: center;
   align-items: center;
-  background: #111;
-  transition: 0.5s;
-  z-index: 2;
+  background: #ffffff;
+  overflow: hidden; /* Add overflow property to hide content outside the viewport */
+  z-index: 1; /* Lower z-index to be behind the header */
 }
 
 .showcase video {
@@ -315,29 +106,31 @@ header .logo {
 .text {
   position: relative;
   z-index: 10;
-  text-align: center; /* Center text */
-  color: #fff; /* Adjusted text color */
+  text-align: center;
+  color: #fff;
 }
 
 .text h2 {
-  font-size: 3em; /* Adjusted font size */
-  font-weight: 700; /* Adjusted font weight */
+  font-size: 3em;
+  font-weight: 700;
   text-transform: uppercase;
-  color: #fff; /* Adjusted text color */
+  color: #fff;
+  text-align: center;
 }
 
 .text h3 {
-  font-size: 2.5em; /* Adjusted font size */
-  font-weight: 500; /* Adjusted font weight */
+  font-size: 2.5em;
+  font-weight: 500;
   text-transform: uppercase;
-  color: #f80cfc; /* Adjusted text color */
+  color: #f80cfc;
 }
 
 .text p {
-  font-size: 1em; /* Adjusted font size */
-  margin: 20px 0;
+  font-size: 1em;
+  margin: 20px auto; /* Center horizontally */
   font-weight: 400;
   max-width: 700px;
+  text-align: center;
 }
 
 .text a {
@@ -350,19 +143,20 @@ header .logo {
   font-weight: 500;
   margin-top: 10px;
   color: #111;
-  letter-spacing: 1px; /* Adjusted letter spacing */
+  letter-spacing: 1px;
   transition: 0.2s;
+  
 }
 
 .text a:hover {
-  letter-spacing: 3px; /* Adjusted letter spacing */
+  letter-spacing: 3px;
 }
 
 .social {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px; /* Adjusted margin */
+  margin-top: 20px;
 }
 
 .social li {
@@ -373,39 +167,189 @@ header .logo {
   display: inline-block;
   margin-right: 20px;
   filter: invert(1);
-  transform: scale(0.8); /* Adjusted scale */
+  transform: scale(0.8);
   transition: 0.5s;
 }
 
 .social li a:hover {
-  transform: scale(0.8) translateY(-5px); /* Adjusted translateY */
+  transform: scale(0.8) translateY(-5px);
 }
 
-.menu {
-  display: none; /* Hide menu */
+/* Style for card */
+.card {
+  margin-bottom: 20px;
+  display: table;
+  width: 100%;
+  
+  }
+  
+  /* Style for card image */
+  .card-img-top {
+  max-width: 100%; /* Set maximum width to fit within the card */
+  height: auto; /* Maintain aspect ratio */
+  }
+  
+  /* Style for placeholder image */
+  .placeholder-image img {
+  max-width: 50%; /* Set maximum width to fit within the placeholder */
+  height: auto; /* Maintain aspect ratio */
+  }
+  
+  /* Style for card title */
+  .card-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  }
+  
+  /* Style for card text */
+  .card-text {
+  font-size: 16px;
+  }
+  
+/* Style for search bar */
+.search-bar {
+  float: right; /* Align to the right */
+  margin-right: 20px; /* Adjust margin as needed */
+  }
+  
+  /* Style for search button */
+  .search-button {
+  background-color: #007bff; /* Blue color */
+  color: #fff; /* White text */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  }
+  
+  .search-button:hover {
+  background-color: #0056b3; /* Darker blue color on hover */
+  }
+
+  .search-section {
+    text-align: center; /* Center the content horizontally */
+    margin-top: 50px; /* Adjust the margin top as needed */
+  }
+
+  .article-title {
+    color: #444444;
+  }
+  
+  a.article-title:hover {
+    color: #428bca;
+    text-decoration: none;
+  }
+  
+  .article-content {
+    white-space: pre-line;
+  }
+  
+  .article-img {
+    height: 65px;
+    width: 65px;
+    margin-right: 16px;
+  }
+  
+  .article-metadata {
+    padding-bottom: 1px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #e3e3e3
+  }
+  
+  .article-svg {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+  }
+  
+  .account-img {
+    height: 125px;
+    width: 125px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+  }
+  
+  .account-heading {
+    font-size: 2.5rem;
+  }
+  
+  .article-metadata a:hover {
+    color: #333;
+    text-decoration: none;
+  }
+
+  .content-section {
+    position: relative;
+    background: #ffffff;
+    padding: 10px 20px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+  }
+  
+/* Split the screen in half */
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
 }
 
-@media (max-width: 991px) {
-  header,
-  .showcase {
-      padding: 20px; /* Adjusted padding */
-  }
+/* Control the left side */
+.left {
+  left: 0;
+  background-color: #ffffff;
+}
 
-  .text h2 {
-      font-size: 2em; /* Adjusted font size */
-  }
+/* Control the right side */
+.right {
+  right: 0;
+  background-color: #f80cfc;
+}
 
-  .text h3 {
-      font-size: 1.5em; /* Adjusted font size */
-  }
+/* If you want the content centered horizontally and vertically */
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+/* Style the image inside the centered container, if needed */
+.centered img {
+  width: 150px;
+  border-radius: 50%;
+}
+
+/* Style the button inside the centered container */
+.centered .btn {
+  background-color: transparent;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.centered .btn:hover {
+  background-color: rgba(109, 172, 249, 0.2);
 }
 
 
+  
 .footer {
   position: absolute;
   bottom: 0;
-  width: 100%;
+  left: 0;
+  right: 0;
   height: 50px;
   line-height: 50px;
   background-color: #979797;
+  z-index: 1000;
 }

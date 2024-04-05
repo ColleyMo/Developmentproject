@@ -4,13 +4,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .forms import SignUpForm, PlayerSignUpForm, TeamSignUpForm, ListingForm, ProfileUpdateForm, PlayerProfileForm, TeamProfileForm
-from .models import CustomUser, Player, PlayerProfile, TeamProfile, Listing
+from .forms import SignUpForm, PlayerSignUpForm, TeamSignUpForm, ListingForm, ProfileUpdateForm, PlayerProfileForm, TeamProfileForm, PlayerListingForm
+from .models import CustomUser, Player, PlayerProfile, TeamProfile, Listing, PlayerListing
 from django.db.models import Q
 from django.core.mail import send_mail
 from django.conf import settings
-#from .models import Message
-from django.http import HttpResponse
+from .models import Message
+from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
@@ -302,3 +302,75 @@ class ChatConsumerView(View):
         self.send(text_data=json.dumps({
             'message': message
         }))
+
+
+def ajax_view(request):
+    # Process the AJAX request and return a JSON response
+    data = {'message': 'AJAX request received successfully!'}
+    return JsonResponse(data)
+
+
+def send_message(request):
+    if request.method == 'POST':
+        sender = request.user
+        recipient_id = request.POST.get('recipient_id')
+        content = request.POST.get('content')
+        if recipient_id and content:
+            recipient = CustomUser.objects.get(id=recipient_id)
+            message = Message.objects.create(sender=sender, recipient=recipient, content=content)
+            return JsonResponse({'success': True})
+    return JsonResponse({'success': False})
+
+def get_messages(request):
+    if request.method == 'GET':
+        sender_id = request.GET.get('sender_id')
+        recipient_id = request.GET.get('recipient_id')
+        if sender_id and recipient_id:
+            messages = Message.objects.filter(sender_id=sender_id, recipient_id=recipient_id)
+            data = [{'sender': message.sender.username, 'content': message.content, 'timestamp': message.timestamp} for message in messages]
+            return JsonResponse({'messages': data})
+    return JsonResponse({'messages': []})
+
+def create_player_listing(request):
+    if request.method == 'POST':
+        form = PlayerListingForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('find_players')
+    else:
+        form = PlayerListingForm()
+    return render(request, 'ffinderapp/create_player_listing.html', {'form': form})
+
+def find_players(request):
+    search_query = request.GET.get('search')
+    player_listings = PlayerListing.objects.all()
+
+    # Filtering logic based on user input
+    if search_query:
+        player_listings = player_listings.filter(Q(title__icontains=search_query) |
+                                                 Q(position__icontains=search_query))
+        
+    # Pagination
+    paginator = Paginator(player_listings, 10)  # 10 player listings per page
+    page_number = request.GET.get('page')
+    try:
+        player_listings_page = paginator.page(page_number)
+    except PageNotAnInteger:
+        player_listings_page = paginator.page(1)
+    except EmptyPage:
+        player_listings_page = paginator.page(paginator.num_pages)
+
+    return render(request, 'ffinderapp/find_players.html', {'player_listings': player_listings_page})
+
+def post_ad(request):
+    return render(request, 'ffinderapp/post_ad.html')
+
+def player_listing_detail(request, pk):
+    # Retrieve the player listing object based on the provided primary key (pk)
+    try:
+        player_listing = PlayerListing.objects.get(pk=pk)
+    except PlayerListing.DoesNotExist:
+        return HttpResponse("Player listing not found.", status=404)
+    
+    # Render the template with the player listing object
+    return render(request, 'ffinderapp/player_listing_detail.html', {'player_listing': player_listing})

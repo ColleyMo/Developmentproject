@@ -1,0 +1,67 @@
+<!-- player_listing_detail.html -->
+
+{% extends 'ffinderapp/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="card">
+        <img src="{% if player_listing.photo %}{{ player_listing.photo.url }}{% else %}{% static 'media/default_player_image.jpg' %}{% endif %}" class="card-img-top" alt="Player Listing Image">
+        <div class="card-body">
+          <h5 class="card-title">{{ player_listing.name }}</h5>
+          <p class="card-text">{{ player_listing.position }}</p>
+          <p class="card-text">{{ player_listing.description }}</p>
+          <p class="card-text"><small class="text-muted">Location: {{ player_listing.location }}</small></p>
+          <!-- Add more details here -->
+        </div>
+        <div class="card-footer">
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#contactModal">
+            Contact Poster
+          </button>
+        </div>
+      </div>
+      <button class="btn btn-primary mt-3" onclick="goBack()">Go Back</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="contactModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="contactModalLabel">Contact Poster</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Add a form or input fields for the user to input their message and contact details -->
+        <form>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea class="form-control" id="message" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="contactEmail">Email Address</label>
+            <input type="email" class="form-control" id="contactEmail" placeholder="Enter your email">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Send Message</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function goBack() {
+  window.history.back();
+}
+</script>
+{% endblock %}

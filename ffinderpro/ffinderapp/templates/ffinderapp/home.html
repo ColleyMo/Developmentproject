@@ -10,7 +10,6 @@
         <div class="text">
             <h2>Welcome to Football Finder</h2>
             <h3>Your ultimate destination for finding football players and teams</h3>
-            <p>Whether you're a player looking for a team or a team in need of players, Football Finder is here to help. With our comprehensive search functionality, you can easily find the perfect match for your football needs. Get started today and take your game to the next level!</p>
             <a href="{% url 'all_listings' %}">find clubs...</a>
         </div>
         {% if not user.is_authenticated %}

@@ -187,7 +187,8 @@ def create_listing(request):
 
 def listing_detail(request, listing_id):
     listing = Listing.objects.get(id=listing_id)
-    return render(request, 'ffinderapp/listing_detail.html', {'listing': listing})
+    user_profile = listing.user_profile
+    return render(request, 'ffinderapp/listing_detail.html', {'listing': listing, 'user_profile': user_profile})
 
 def all_listings(request):
     search_query = request.GET.get('search')

@@ -52,6 +52,7 @@ class Listing(models.Model):
     city = models.CharField(max_length=100, default='')
     photo = models.ImageField(upload_to='media/listing_photos/', null=True, blank=True)  # Adding photo field
     positions = models.CharField(max_length=100, default='')
+    user_profile = models.ForeignKey('CustomUser', on_delete=models.CASCADE, null= True)
 
     def __str__(self):
         return self.title

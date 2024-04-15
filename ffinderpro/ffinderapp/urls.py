@@ -28,6 +28,7 @@ urlpatterns = [
     path('create_player_listing/', views.create_player_listing, name='create_player_listing'),
     path('find_players/', views.find_players, name='find_players'),
     path('post_ad/', views.post_ad, name='post_ad'),
-    
+
+
 
 ]

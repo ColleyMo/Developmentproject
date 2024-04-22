@@ -1,8 +1,16 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
-from .views import home, player_signup, signup, login_view, profile, team_signup, player_profile, team_profile
-
+from .views import (
+    home,
+    player_signup,
+    signup,
+    login_view,
+    profile,
+    team_signup,
+    player_profile,
+    team_profile
+)
 
 urlpatterns = [
     path('', home, name='home'),
@@ -18,6 +26,8 @@ urlpatterns = [
     path('my-listings', views.my_listings, name='my_listings'),
     path('player-profile/', player_profile, name='player_profile'),
     path('team-profile/', team_profile, name='team_profile'),
+    # Adjust the URL pattern for the profile view to redirect based on user selection
+    path('profile/', views.redirect_to_profile, name='redirect_to_profile'),
     #path('profile/<str:username>/', views.profile, name='profile'),
     path('edit-listing/<int:listing_id>/', views.edit_listing, name='edit_listing'),
     path('delete-listing/<int:listing_id>/', views.delete_listing, name='delete_listing'),
@@ -28,7 +38,4 @@ urlpatterns = [
     path('create_player_listing/', views.create_player_listing, name='create_player_listing'),
     path('find_players/', views.find_players, name='find_players'),
     path('post_ad/', views.post_ad, name='post_ad'),
-
-
-
 ]

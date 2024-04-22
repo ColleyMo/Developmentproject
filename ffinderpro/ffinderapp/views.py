@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import SignUpForm, PlayerSignUpForm, TeamSignUpForm, ListingForm, ProfileUpdateForm, PlayerProfileForm, TeamProfileForm, PlayerListingForm
-from .models import CustomUser, Player, PlayerProfile, TeamProfile, Listing, PlayerListing
+from .models import CustomUser, PlayerProfile, TeamProfile, Listing, PlayerListing
 from django.db.models import Q
 from django.core.mail import send_mail
 from django.conf import settings
@@ -25,22 +25,27 @@ def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            # Create a new CustomUser instance (assuming you have a CustomUser model)
-            custom_user = form.save()
-            registration_type = form.cleaned_data.get('registration_type')
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            registration_type = form.cleaned_data['registration_type']
+
+            # Create a CustomUser instance
+            user = CustomUser.objects.create_user(username=username, password=password)
+
             if registration_type == 'player':
-                # Create a new Player profile instance and associate it with the CustomUser
-                player_profile = Player(user=custom_user)
-                player_profile.save()
+                # Create a PlayerProfile instance and associate with user
+                PlayerProfile.objects.create(user=user)
+                return redirect('player_profile')
             elif registration_type == 'team':
-                # Create a new TeamProfile instance and associate it with the CustomUser
-                team_profile = TeamProfile(user=custom_user, **form.cleaned_data)
-                team_profile.save()
-            login(request, custom_user)
-            return redirect('home')
+                # Create a TeamProfile instance and associate with user
+                TeamProfile.objects.create(user=user)
+                return redirect('team_profile')
+
     else:
         form = SignUpForm()
+
     return render(request, 'ffinderapp/signup.html', {'form': form})
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -80,6 +85,16 @@ def team_signup(request):
     return render(request, 'ffinderapp/team_signup.html', {'form': form})
 
 @login_required
+def redirect_to_profile(request):
+    if request.user.is_player:
+        return redirect('player_profile')
+    elif request.user.is_team:
+        return redirect('team_profile')
+    else:
+        # Handle the case when user is not associated with any profile type
+        # You can redirect them to a generic profile page or handle this case as per your requirement
+        pass
+
 def profile(request):
     user = request.user
     u_form = ProfileUpdateForm(instance=user)

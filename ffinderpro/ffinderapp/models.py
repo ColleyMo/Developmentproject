@@ -7,7 +7,7 @@ class CustomUser(AbstractUser):
     is_player = models.BooleanField(default=False)
     is_team = models.BooleanField(default=False)
     team = models.ForeignKey('Team', on_delete=models.SET_NULL, null=True, blank=True, related_name='team_members')
-    photo = models.ImageField(upload_to='media/', null=True, blank=True)
+    photo = models.ImageField(upload_to='media/player_photos', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Custom users"
@@ -37,7 +37,7 @@ class TeamProfile(models.Model):
     league = models.CharField(max_length=100)
     league_division = models.CharField(max_length=50)
     level_on_pyramid = models.CharField(max_length=50)
-    photo = models.ImageField(upload_to='media/team_profile_photos/', default='/Users/mcolley/Developmentproject/ffinderpro/ffinderapp/static/media/logo.jpeg', null=True, blank=True)
+    photo = models.ImageField(upload_to='media/team_profile_photos/', default='/media/', null=True, blank=True)
     # Add more fields specific to team profile
 
     def __str__(self):
@@ -83,7 +83,9 @@ class PlayerListing(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     position = models.CharField(max_length=50)
+    location = models.CharField(max_length=100, default='')
     user_profile = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='player_listings', null=True, default=None)
+    contact_number = models.CharField(max_length=15, default='')
 
     def __str__(self):
         return self.title

@@ -16,11 +16,18 @@
           <p class="card-text"><small class="text-muted">Location: {{ player_listing.location }}</small></p>
           <!-- Add more details here -->
         </div>
+        {% if user.is_authenticated %}
         <div class="card-footer">
           <!-- Button trigger modal -->
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#contactModal">
-            Contact Poster
-          </button>
+          <button type="button" class="btn btn-primary" onclick="location.href='tel:{{ playerlisting.contact_number }}'">
+            Call Poster
+        </button>
+        
+        <!-- If you want to send a text message -->
+        <a href="sms:{{ listing.contact_number }}" class="btn btn-primary">Text Poster</a>
+      </div>
+      {% endif %}
+      </div>
         </div>
       </div>
       <button class="btn btn-primary mt-3" onclick="goBack()">previous page </button>

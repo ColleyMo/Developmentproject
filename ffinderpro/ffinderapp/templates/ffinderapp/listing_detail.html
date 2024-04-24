@@ -21,8 +21,8 @@
           
           <!-- Add more details here -->
       <!-- Inside your card footer -->
+      {% if user.is_authenticated %}
       <div class="card-footer">
-        <!-- If you want a button -->
         <button type="button" class="btn btn-primary" onclick="location.href='tel:{{ listing.contact_number }}'">
             Call Poster
         </button>
@@ -32,6 +32,7 @@
       </div>
 
       </div>
+      {% endif %}
       <button class="btn btn-primary mt-3" onclick="goBack()"> previous page</button>
     </div>
   </div>

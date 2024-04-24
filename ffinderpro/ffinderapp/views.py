@@ -98,8 +98,8 @@ def redirect_to_profile(request):
 def profile(request):
     user = request.user
     u_form = ProfileUpdateForm(instance=user)
-    p_form = None
-    t_form = None
+    p_form = PlayerProfileForm()  # Initialize p_form here
+    t_form = TeamProfileForm()
 
     if request.method == 'POST':
         if 'player_profile_submit' in request.POST:
@@ -132,7 +132,8 @@ def profile(request):
             t_form = TeamProfileForm()
 
     return render(request, 'ffinderapp/profile.html', {'u_form': u_form, 'p_form': p_form, 't_form': t_form, 'user': user})
-    
+
+
 def player_profile(request):
     user = request.user
     u_form = ProfileUpdateForm(instance=user)

@@ -54,7 +54,7 @@ class ProfileUpdateForm(forms.ModelForm):
     )
 
     class Meta:
-        model = PlayerProfile
+        model = CustomUser
         fields = ['date_of_birth', 'photo']
 
 
@@ -77,4 +77,4 @@ class TeamProfileForm(forms.ModelForm):
 class PlayerListingForm(forms.ModelForm):
     class Meta:
         model = PlayerListing
-        fields = ['title', 'description', 'position']
+        fields = ['title', 'description', 'position', 'contact_number', 'location']

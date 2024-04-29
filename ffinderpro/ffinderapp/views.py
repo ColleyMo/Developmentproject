@@ -382,6 +382,8 @@ def find_players(request):
 def post_ad(request):
     return render(request, 'ffinderapp/post_ad.html')
 
+
+
 def player_listing_detail(request, pk):
     # Retrieve the player listing object based on the provided primary key (pk)
     try:

@@ -34,11 +34,11 @@ def signup(request):
 
             if registration_type == 'player':
                 # Create a PlayerProfile instance and associate with user
-                PlayerProfile.objects.create(user=user)
+                PlayerProfile.objects.create(user=CustomUser)
                 return redirect('player_profile')
             elif registration_type == 'team':
                 # Create a TeamProfile instance and associate with user
-                TeamProfile.objects.create(user=user)
+                TeamProfile.objects.create(user=CustomUser)
                 return redirect('team_profile')
 
     else:
@@ -206,6 +206,26 @@ def listing_detail(request, listing_id):
     user_profile = listing.user_profile
     return render(request, 'ffinderapp/listing_detail.html', {'listing': listing, 'user_profile': user_profile})
 
+def edit_listing(request, listing_id):
+    listing = get_object_or_404(Listing, id=listing_id)
+    if request.method == 'POST':
+        form = ListingForm(request.POST, instance=listing)
+        if form.is_valid():
+            form.save()
+            return redirect('listing_detail', listing_id=listing_id)
+    else:
+        form = ListingForm(instance=listing)
+    return render(request, 'ffinderapp/edit_listing.html', {'form': form})
+
+def delete_listing(request, listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id)
+    if request.method == 'POST':
+        listing.delete()
+        return redirect('profile')  # Redirect to profile page after deleting
+    return render(request, 'confirm_delete_listing.html', {'listing': listing})
+
+
+
 def all_listings(request):
     search_query = request.GET.get('search')
     listings = Listing.objects.all()
@@ -234,23 +254,6 @@ def my_listings(request):
     listings = user.listing_set.all()
     return render(request, 'ffinderapp/my_listings.html', {'listings': listings})
 
-def edit_listing(request, listing_id):
-    listing = get_object_or_404(Listing, id=listing_id)
-    if request.method == 'POST':
-        form = ListingForm(request.POST, instance=listing)
-        if form.is_valid():
-            form.save()
-            return redirect('listing_detail', listing_id=listing_id)
-    else:
-        form = ListingForm(instance=listing)
-    return render(request, 'ffinderapp/edit_listing.html', {'form': form})
-
-def delete_listing(request, listing_id):
-    listing = get_object_or_404(Listing, pk=listing_id)
-    if request.method == 'POST':
-        listing.delete()
-        return redirect('profile')  # Redirect to profile page after deleting
-    return render(request, 'confirm_delete_listing.html', {'listing': listing})
 
 
 """
